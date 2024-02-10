@@ -1,8 +1,15 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
 
-export default function CharacterList({ allCharacters }) {
+export default function CharacterList({ allCharacters, isLoading }) {
+  if (isLoading)
+    return (
+      <div className="characters-list">
+        <Loading />
+      </div>
+    );
+
   return (
-    <div className="character-list">
+    <div className="characters-list">
       {allCharacters.map((character) => {
         return <Character key={character.id} character={character} />;
       })}
@@ -28,4 +35,8 @@ function Character({ character }) {
       </button>
     </div>
   );
+}
+
+function Loading() {
+  return <p className="name">Loading Data...</p>;
 }
