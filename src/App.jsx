@@ -5,6 +5,7 @@ import CharacterDetail from "./components/CharacterDetail";
 import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 function App() {
   const [allCharacters, setAllCharacters] = useState([]);
@@ -14,12 +15,10 @@ function App() {
     async function fetchData() {
       try {
         setIsLoading(true);
-        let res = await fetch("https://rickandmortyapi.com/api/character");
-        if (!res.ok) throw new Error("it is not find Characters information!");
-        let data = await res.json();
+        const { data } = await axios.get("https://rickandmortyapi.com/api/character");
         setAllCharacters(data.results.splice(0, 5));
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.error);
       } finally {
         setIsLoading(false);
       }
