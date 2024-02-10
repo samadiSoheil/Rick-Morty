@@ -1,6 +1,6 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
 
-export default function CharacterList({ allCharacters, isLoading }) {
+export default function CharacterList({ allCharacters, isLoading, onShowCharacter }) {
   if (isLoading)
     return (
       <div className="characters-list">
@@ -11,13 +11,17 @@ export default function CharacterList({ allCharacters, isLoading }) {
   return (
     <div className="characters-list">
       {allCharacters.map((character) => {
-        return <Character key={character.id} character={character} />;
+        return (
+          <Character key={character.id} character={character}>
+            <ShowCharacter onShowCharacter={onShowCharacter} characterId={character.id} />
+          </Character>
+        );
       })}
     </div>
   );
 }
 
-function Character({ character }) {
+function Character({ character, children }) {
   return (
     <div key={character.id} className="list__item">
       <img src={character.image} alt={character.name} />
@@ -30,13 +34,19 @@ function Character({ character }) {
         <span> {character.status}</span>
         <span> - {character.species}</span>
       </div>
-      <button className="icon red">
-        <EyeIcon />
-      </button>
+      {children}
     </div>
   );
 }
 
 function Loading() {
   return <p className="name">Loading Data...</p>;
+}
+
+function ShowCharacter({ onShowCharacter, characterId }) {
+  return (
+    <button className="icon red" onClick={() => onShowCharacter(characterId)}>
+      <EyeIcon />
+    </button>
+  );
 }
