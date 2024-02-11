@@ -182,6 +182,8 @@
 /* character episodes */
 
 .character-episodes {
+  max-height: 506px;
+  overflow: auto;
   /* border: 1px solid var(--slate-300); */
   background-color: var(--slate-800);
   border-radius: 1rem;
