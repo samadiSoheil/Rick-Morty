@@ -3,7 +3,7 @@ import { character, episodes } from "../../data/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function CharacterDetail({ characterId }) {
+export default function CharacterDetail({ characterId, onAddFavorite, isFave }) {
   // fetch Single Character
   const [singleCharacter, setSingleCharacter] = useState(null);
   const [allEpisode, setAllEpisode] = useState(null);
@@ -70,7 +70,16 @@ export default function CharacterDetail({ characterId }) {
             <p>{singleCharacter.location.name}</p>
           </div>
           <div className="actions">
-            <button className="btn btn--primary">Add to favorite</button>
+            {isFave ? (
+              <p className="btn">it's in fave ❤</p>
+            ) : (
+              <button
+                className="btn btn--primary"
+                onClick={() => onAddFavorite(singleCharacter)}
+              >
+                Add to favorite
+              </button>
+            )}
           </div>
         </div>
       </div>
