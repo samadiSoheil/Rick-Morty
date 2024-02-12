@@ -1,11 +1,12 @@
 import "./App.css";
 import Navbar, { Search } from "./components/Navbar";
-import CharacterList from "./components/CharacterList";
+import CharacterList, { Character } from "./components/CharacterList";
 import CharacterDetail from "./components/CharacterDetail";
 import { allCharacters } from "../data/data";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Modal from "./components/Modal";
 
 function App() {
   const [allCharacters, setAllCharacters] = useState([]);
@@ -13,6 +14,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [id, setId] = useState(undefined);
   const [favorite, setFevorite] = useState([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,7 +26,12 @@ function App() {
         setAllCharacters(data.results);
       } catch (err) {
         setAllCharacters([]);
-        toast.error(err.response.data.error);
+        if (!err.response) {
+          toast.error(err.message);
+        } else {
+          toast.error(err.response.data.error);
+        }
+        // toast.error(err.response.data.error);
       } finally {
         setIsLoading(false);
       }
@@ -46,10 +53,27 @@ function App() {
 
   isFave = favorite.find((i) => i.id == id);
 
+  const handleDeleteFaveCharac = (elemId) => {
+    console.log(elemId);
+    let filterdFaveCharac = favorite.filter((p) => p.id != elemId);
+    console.log(filterdFaveCharac);
+
+    setFevorite(filterdFaveCharac);
+  };
   return (
     <div className="app">
       <Toaster />
-      <Navbar favorite={favorite} allCharactersLength={allCharacters.length}>
+      <Modal
+        isOpenModal={isOpenModal}
+        onCloseModal={setIsOpenModal}
+        character={favorite}
+        onDeletFaveCharac={handleDeleteFaveCharac}
+      ></Modal>
+      <Navbar
+        favorite={favorite}
+        allCharactersLength={allCharacters.length}
+        onOpenModal={setIsOpenModal}
+      >
         <Search query={query} setQuery={setQuery} />
       </Navbar>
       <div className="main">
