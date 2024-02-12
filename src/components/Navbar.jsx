@@ -1,12 +1,12 @@
 import { HeartIcon } from "@heroicons/react/24/outline";
 
-export default function Navbar({ children, allCharactersLength, favorite }) {
+export default function Navbar({ children, allCharactersLength, favorite, onOpenModal }) {
   return (
     <nav className="navbar">
       <div className="navbar__logo">LOGO 😜</div>
       {children}
       <div className="navbar__result">Found {allCharactersLength} character</div>
-      <button className="heart">
+      <button className="heart" onClick={() => onOpenModal((is) => !is)}>
         <HeartIcon className="icon" />
         <span className="badge">{favorite.length}</span>
       </button>
