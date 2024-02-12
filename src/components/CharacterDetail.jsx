@@ -1,6 +1,7 @@
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function CharacterDetail({ characterId, onAddFavorite, isFave }) {
   // fetch Single Character
@@ -28,7 +29,12 @@ export default function CharacterDetail({ characterId, onAddFavorite, isFave }) 
         // console.log(episode);
         episode ? setAllEpisode([episode].flat().splice(0)) : null;
       } catch (error) {
-        toast.error(error.response.data.error);
+        console.log(error);
+        if (!error.response) {
+          toast.error(error.message);
+        } else {
+          toast.error(error.response.data.error);
+        }
       }
     }
     characterId ? fetchCharacter() : null;
