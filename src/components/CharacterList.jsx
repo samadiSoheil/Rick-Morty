@@ -21,7 +21,8 @@ export default function CharacterList({ allCharacters, isLoading, onShowCharacte
   );
 }
 
-function Character({ character, children }) {
+export function Character({ character, children }) {
+  if (!character || character.length == 0) return null;
   return (
     <div key={character.id} className="list__item">
       <img src={character.image} alt={character.name} />
