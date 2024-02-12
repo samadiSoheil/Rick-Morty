@@ -1,5 +1,4 @@
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
-import { character, episodes } from "../../data/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,6 +6,7 @@ export default function CharacterDetail({ characterId, onAddFavorite, isFave }) 
   // fetch Single Character
   const [singleCharacter, setSingleCharacter] = useState(null);
   const [allEpisode, setAllEpisode] = useState(null);
+  const [sort, setSort] = useState(false);
 
   useEffect(() => {
     async function fetchCharacter() {
@@ -43,7 +43,18 @@ export default function CharacterDetail({ characterId, onAddFavorite, isFave }) 
         Select a character to see their details
       </p>
     );
-  if (!singleCharacter) return null;
+  if (!singleCharacter || !allEpisode) return null;
+
+  let sortedArr;
+  if (sort) {
+    sortedArr = [...allEpisode].sort((a, b) => {
+      return new Date(a.created) - new Date(b.created);
+    });
+  } else {
+    sortedArr = [...allEpisode].sort((a, b) => {
+      return new Date(b.created) - new Date(a.created);
+    });
+  }
 
   return (
     <div style={{ flex: 1 }}>
@@ -86,12 +97,17 @@ export default function CharacterDetail({ characterId, onAddFavorite, isFave }) 
       <div className="character-episodes">
         <div className="title">
           <h2>List of Episodes</h2>
-          <ArrowUpCircleIcon className="icon" />
+          <button
+            onClick={() => setSort((is) => !is)}
+            style={{ rotate: sort ? "180deg" : "0deg", transition: "all 0.3s" }}
+          >
+            <ArrowUpCircleIcon className="icon" />
+          </button>
         </div>
         <ul>
-          {!allEpisode
+          {!sortedArr
             ? null
-            : allEpisode.map((e, index) => {
+            : sortedArr.map((e, index) => {
                 return (
                   <li key={e.id}>
                     <div>
